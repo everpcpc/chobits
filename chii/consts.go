@@ -16,6 +16,15 @@ const (
 	TypeReal
 )
 
+// CollectionType ...
+type CollectionType string
+
+// ...
+const (
+	TypeWatching    CollectionType = "watching"     // 在看的动画与三次元条目
+	TypeAllWatching CollectionType = "all_watching" // 在看的动画三次元与书籍条目
+)
+
 // CollectionsStatus ...
 type CollectionsStatus string
 

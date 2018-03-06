@@ -9,7 +9,7 @@ import (
 
 func TestGet(t *testing.T) {
 	c := NewClient(&http.Client{})
-	user, _, err := c.Users.Get("everpcpc")
+	user, _, err := c.Users.Info("everpcpc")
 	assert.Nil(t, err)
 	assert.Equal(t, 26024, user.ID)
 }

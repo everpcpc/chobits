@@ -1,6 +1,7 @@
 package chii
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/dghubble/sling"
@@ -30,17 +31,56 @@ type UserService struct {
 	sling *sling.Sling
 }
 
-// newUserService returns a new UserService.
 func newUserService(sling *sling.Sling) *UserService {
 	return &UserService{
 		sling: sling.Path("user/"),
 	}
 }
 
-// Get returns the requested User.
-func (s *UserService) Get(username string) (*User, *http.Response, error) {
+// Info returns the requested User.
+func (s *UserService) Info(username string) (*User, *http.Response, error) {
 	user := new(User)
 	apiError := new(APIError)
 	resp, err := s.sling.New().Get(username).Receive(user, apiError)
 	return user, resp, relevantError(err, *apiError)
+}
+
+// Collection returns the collection for requested User.
+// TODO(everpcpc)
+// @username
+// @cat CollectionType
+// @ids: exp 1,2,4,6
+// @responseGroup: medium/small, default medium
+func (s *UserService) Collection(username string, cat CollectionType, ids []int, responceGroup ResponseGroup) (*User, *http.Response, error) {
+	return nil, nil, nil
+}
+
+// CollectionsOverview returns the collection overview for requested User, not paged.
+// TODO(everpcpc) Error: APP ID Parameter is Missing"
+// @username
+// @subject_type
+// @max_result: max 25
+// @responseGroup: medium/small, default medium
+func (s *UserService) CollectionsOverview(username string, subjectType SubjectType, maxResult int) (interface{}, *http.Response, error) {
+	return nil, nil, nil
+}
+
+// CollectionsStatus returns all collections status for the requested User.
+// TODO(everpcpc) Error: APP ID Parameter is Missing
+func (s *UserService) CollectionsStatus(username string) (interface{}, *http.Response, error) {
+	apiError := new(APIError)
+	path := fmt.Sprintf("%s/collections/status", username)
+	resp, err := s.sling.New().Get(path).Receive(nil, apiError)
+	return nil, resp, relevantError(err, *apiError)
+}
+
+// Progress returns progress for the requested User.
+// TODO(everpcpc) Requires Authentication
+// @username
+// @subject_id
+func (s *UserService) Progress(username string, subjectID int) (interface{}, *http.Response, error) {
+	apiError := new(APIError)
+	path := fmt.Sprintf("%s/progress", username)
+	resp, err := s.sling.New().Get(path).Receive(nil, apiError)
+	return nil, resp, relevantError(err, *apiError)
 }
