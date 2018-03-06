@@ -8,10 +8,8 @@ import (
 )
 
 func TestGet(t *testing.T) {
-	httpClient := &http.Client{}
-	c := NewClient(httpClient)
-	uc := newUserService(c.sling)
-	user, _, err := uc.Get("everpcpc")
+	c := NewClient(&http.Client{})
+	user, _, err := c.Users.Get("everpcpc")
 	assert.Nil(t, err)
 	assert.Equal(t, 26024, user.ID)
 }
