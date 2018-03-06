@@ -19,13 +19,12 @@ func (e APIError) Error() string {
 // Empty returns true if empty.
 // FIXME(everpcpc)
 func (e APIError) Empty() bool {
-	if len(e.Message) == 0 {
+	if e.Message == "" {
 		return true
 	}
 	return false
 }
 
-// FIXME(everpcpc)
 func relevantError(httpError error, apiError APIError) error {
 	if httpError != nil {
 		return httpError
