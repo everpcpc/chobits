@@ -46,7 +46,7 @@ func (s *UserService) Info(username string) (*User, *http.Response, error) {
 }
 
 // Collection returns the collection for requested User.
-// TODO(everpcpc)
+// TODO:(everpcpc)
 // @username
 // @cat CollectionType
 // @ids: exp 1,2,4,6
@@ -56,7 +56,7 @@ func (s *UserService) Collection(username string, cat CollectionType, ids []int,
 }
 
 // CollectionsOverview returns the collection overview for requested User, not paged.
-// TODO(everpcpc) Error: APP ID Parameter is Missing"
+// TODO:(everpcpc) Error: APP ID Parameter is Missing"
 // @username
 // @subject_type
 // @max_result: max 25
@@ -66,7 +66,7 @@ func (s *UserService) CollectionsOverview(username string, subjectType SubjectTy
 }
 
 // CollectionsStatus returns all collections status for the requested User.
-// TODO(everpcpc) Error: APP ID Parameter is Missing
+// TODO:(everpcpc) Error: APP ID Parameter is Missing
 func (s *UserService) CollectionsStatus(username string) (interface{}, *http.Response, error) {
 	apiError := new(APIError)
 	path := fmt.Sprintf("%s/collections/status", username)
@@ -75,7 +75,7 @@ func (s *UserService) CollectionsStatus(username string) (interface{}, *http.Res
 }
 
 // Progress returns progress for the requested User.
-// TODO(everpcpc) Requires Authentication
+// TODO:(everpcpc) Requires Authentication
 // @username
 // @subject_id
 func (s *UserService) Progress(username string, subjectID int) (interface{}, *http.Response, error) {

@@ -17,7 +17,7 @@ func (e APIError) Error() string {
 }
 
 // Empty returns true if empty.
-// FIXME(everpcpc)
+// FIXME:(everpcpc)
 func (e APIError) Empty() bool {
 	if e.Message == "" {
 		return true
