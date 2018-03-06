@@ -7,12 +7,12 @@ import (
 )
 
 func TestSubjectType(t *testing.T) {
-	assert.Equal(t, TypeBook, SubjectType(1))
-	assert.Equal(t, TypeMusic, SubjectType(3))
-	assert.Equal(t, TypeReal, SubjectType(6))
+	assert.Equal(t, SubjectType(1), TypeBook)
+	assert.Equal(t, SubjectType(3), TypeMusic)
+	assert.Equal(t, SubjectType(6), TypeReal)
 }
 
 func TestCollectionStatus(t *testing.T) {
-	assert.Equal(t, StatusDropped, CollectionsStatus("dropped"))
-	assert.Equal(t, StatusOnHold, CollectionsStatus("on_hold"))
+	assert.Equal(t, CollectionsStatus("dropped"), StatusDropped)
+	assert.Equal(t, CollectionsStatus("on_hold"), StatusOnHold)
 }
