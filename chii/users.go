@@ -3,6 +3,7 @@ package chii
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/dghubble/sling"
 )
@@ -37,50 +38,131 @@ func newUserService(sling *sling.Sling) *UserService {
 	}
 }
 
+// UserCollectionsStatus ...
+type UserCollectionsStatus struct {
+	Type     SubjectType   `json:"type,omitempty"`
+	Name     string        `json:"name,omitempty"`
+	NameCN   string        `json:"name_cn,omitempty"`
+	Collects []UserCollect `json:"collects,omitempty"`
+}
+
+// UserCollect ...
+type UserCollect struct {
+	Status UserCollectStatus `json:"status,omitempty"`
+	Count  int               `json:"count,omitempty"`
+	List   []SubjectOverview `json:"list,omitempty"`
+}
+
+// UserCollectStatus ...
+type UserCollectStatus struct {
+	ID   int               `json:"id,,omitempty"`
+	Type CollectionsStatus `json:"type,omitempty"`
+	Name string            `json:"name,omitempty"`
+}
+
+// UserCollectionsSubject ...
+type UserCollectionsSubject struct {
+	Name      string  `json:"name,omitempty"`
+	SubjectID int     `json:"subject_id,omitempty"`
+	EpStatus  int     `json:"ep_status,omitemtpy"`
+	VolStatus int     `json:"vol_status,omitemtpy"`
+	LastTouch int     `json:"lasttouch,omitempty"`
+	Subject   Subject `json:"subject,omitemtpy"`
+}
+
 // Info returns the requested User.
-func (s *UserService) Info(username string) (*User, *http.Response, error) {
-	user := new(User)
+func (s *UserService) Info(username string) (User, *http.Response, error) {
+	user := User{}
 	apiError := new(APIError)
-	resp, err := s.sling.New().Get(username).Receive(user, apiError)
+	resp, err := s.sling.New().Get(username).Receive(&user, apiError)
 	return user, resp, relevantError(err, *apiError)
 }
 
+///////////////////////////////////////////////////////////////
+
+type userCollectionParams struct {
+	Cat           CollectionType `url:"cat,omitemtpy"`
+	IDs           string         `url:"ids,omitemtpy"`
+	ResponseGroup ResponseGroup  `url:"responseGroup,omitemtpy"`
+}
+
 // Collection returns the collection for requested User.
-// TODO:(everpcpc)
 // @username
 // @cat CollectionType
 // @ids: exp 1,2,4,6
 // @responseGroup: medium/small, default medium
-func (s *UserService) Collection(username string, cat CollectionType, ids []int, responceGroup ResponseGroup) (*User, *http.Response, error) {
-	return nil, nil, nil
+func (s *UserService) Collection(username string, cat CollectionType, ids []int, responseGroup ResponseGroup) ([]UserCollectionsSubject, *http.Response, error) {
+	apiError := new(APIError)
+	path := fmt.Sprintf("%s/collection", username)
+	params := &userCollectionParams{
+		Cat:           cat,
+		IDs:           strings.Trim(strings.Join(strings.Fields(fmt.Sprint(ids)), ","), "[]"),
+		ResponseGroup: responseGroup,
+	}
+	subjects := []UserCollectionsSubject{}
+	resp, err := s.sling.New().Get(path).QueryStruct(params).Receive(&subjects, apiError)
+	return subjects, resp, relevantError(err, *apiError)
 }
 
-// CollectionsOverview returns the collection overview for requested User, not paged.
-// TODO:(everpcpc) Error: APP ID Parameter is Missing"
-// @username
-// @subject_type
-// @max_result: max 25
-// @responseGroup: medium/small, default medium
-func (s *UserService) CollectionsOverview(username string, subjectType SubjectType, maxResult int) (interface{}, *http.Response, error) {
-	return nil, nil, nil
+///////////////////////////////////////////////////////////////
+
+type userCollectionsOverviewParams struct {
+	MaxResults int `url:"max_results,omitempty"`
 }
 
-// CollectionsStatus returns all collections status for the requested User.
-// TODO:(everpcpc) Error: APP ID Parameter is Missing
-func (s *UserService) CollectionsStatus(username string) (interface{}, *http.Response, error) {
+// CollectionsOverview returns the collection overview
+// for requested User, not paged.
+// @max_results: max 25
+func (s *UserService) CollectionsOverview(username string, subjectType SubjectType, maxResults int) ([]UserCollectionsStatus, *http.Response, error) {
+	apiError := new(APIError)
+	path := fmt.Sprintf("%s/collections/%s", username, subjectTypeString[subjectType])
+	params := &userCollectionsOverviewParams{MaxResults: maxResults}
+	status := []UserCollectionsStatus{}
+	resp, err := s.sling.New().Get(path).QueryStruct(params).Receive(&status, apiError)
+	return status, resp, relevantError(err, *apiError)
+}
+
+///////////////////////////////////////////////////////////////
+
+// CollectionsStatus returns all collections status
+// for the requested User.
+func (s *UserService) CollectionsStatus(username string) ([]UserCollectionsStatus, *http.Response, error) {
 	apiError := new(APIError)
 	path := fmt.Sprintf("%s/collections/status", username)
-	resp, err := s.sling.New().Get(path).Receive(nil, apiError)
-	return nil, resp, relevantError(err, *apiError)
+	status := []UserCollectionsStatus{}
+	resp, err := s.sling.New().Get(path).Receive(&status, apiError)
+	return status, resp, relevantError(err, *apiError)
+}
+
+///////////////////////////////////////////////////////////////
+
+type userProgressParams struct {
+	SubjectID int `url:"subject_id,omitempty"`
 }
 
 // Progress returns progress for the requested User.
-// TODO:(everpcpc) Requires Authentication
-// @username
-// @subject_id
-func (s *UserService) Progress(username string, subjectID int) (interface{}, *http.Response, error) {
+// limit 15
+func (s *UserService) Progress(username string) ([]SubjectOverview, *http.Response, error) {
 	apiError := new(APIError)
 	path := fmt.Sprintf("%s/progress", username)
-	resp, err := s.sling.New().Get(path).Receive(nil, apiError)
-	return nil, resp, relevantError(err, *apiError)
+
+	subjects := []SubjectOverview{}
+	resp, err := s.sling.New().Get(path).Receive(&subjects, apiError)
+	return subjects, resp, relevantError(err, *apiError)
+}
+
+// ProgressSubject returns progress for the requested User
+// and for a given subject.
+func (s *UserService) ProgressSubject(username string, subjectID int) (SubjectOverview, *http.Response, error) {
+	apiError := new(APIError)
+	path := fmt.Sprintf("%s/progress", username)
+	subject := SubjectOverview{}
+
+	if subjectID == 0 {
+		return subject, nil, fmt.Errorf("subjectID invalid")
+	}
+
+	params := &userProgressParams{SubjectID: subjectID}
+	resp, err := s.sling.New().Get(path).QueryStruct(params).Receive(&subject, apiError)
+	return subject, resp, relevantError(err, *apiError)
 }

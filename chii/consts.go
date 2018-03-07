@@ -16,6 +16,16 @@ const (
 	TypeReal
 )
 
+var subjectTypeString = map[SubjectType]string{
+	TypeNil:      "nil",
+	TypeBook:     "book",
+	TypeAnime:    "anime",
+	TypeMusic:    "music",
+	TypeGame:     "game",
+	TypeReserved: "reserved",
+	TypeReal:     "real",
+}
+
 // CollectionType ...
 type CollectionType string
 
