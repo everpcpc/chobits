@@ -16,6 +16,7 @@ type ProgressService struct {
 
 func newProgressService(sling *sling.Sling) *ProgressService {
 	return &ProgressService{
+		// FIXME: path?
 		sling: sling.Path(""),
 	}
 }

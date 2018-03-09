@@ -52,10 +52,10 @@ type EpStatus string
 
 // ...
 const (
-	StatusWatched EpStatus = "watched"
-	StatusQueue   EpStatus = "queue"
-	StatusDrop    EpStatus = "drop"
-	StatusRemove  EpStatus = "remove"
+	StatusEpWatched EpStatus = "watched"
+	StatusEpQueue   EpStatus = "queue"
+	StatusEpDrop    EpStatus = "drop"
+	StatusEpRemove  EpStatus = "remove"
 )
 
 // ResponseGroup ...
@@ -63,9 +63,9 @@ type ResponseGroup string
 
 // ...
 const (
-	ResponceSmall  ResponseGroup = "small"
-	ResponceMediam ResponseGroup = "mediam"
-	ResponceLarge  ResponseGroup = "large"
+	ResponseSmall  ResponseGroup = "small"
+	ResponseMediam ResponseGroup = "mediam"
+	ResponseLarge  ResponseGroup = "large"
 )
 
 // StatusCode ...

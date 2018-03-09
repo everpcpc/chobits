@@ -16,15 +16,8 @@ type User struct {
 	URL      string `json:"url"`
 	Username string `json:"username"`
 	Nickname string `json:"nickname"`
-	Avatar   Avatar `json:"avatar"`
+	Avatar   Images `json:"avatar"`
 	Sign     string `json:"sign"`
-}
-
-// Avatar represents avatars for a Bangumi User.
-type Avatar struct {
-	Large  string `json:"large"`
-	Medium string `json:"medium"`
-	Small  string `json:"small"`
 }
 
 // UserService provides methods for accessing Bangumi user API endpoints.
@@ -36,6 +29,13 @@ func newUserService(sling *sling.Sling) *UserService {
 	return &UserService{
 		sling: sling.Path("user/"),
 	}
+}
+
+// SubjectOverview ...
+type SubjectOverview struct {
+	SubjectID int     `json:"subject_id"`
+	Eps       []Ep    `json:"eps,omitempty"`
+	Detail    Subject `json:"subject,omitempty"`
 }
 
 // UserCollectionsStatus ...
@@ -69,6 +69,8 @@ type UserCollectionsSubject struct {
 	LastTouch int     `json:"lasttouch,omitempty"`
 	Subject   Subject `json:"subject,omitemtpy"`
 }
+
+///////////////////////////////////////////////////////////////
 
 // Info returns the requested User.
 func (s *UserService) Info(username string) (User, *http.Response, error) {

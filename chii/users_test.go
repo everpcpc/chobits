@@ -7,12 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-var (
-	testClientID = "bgmxxxxxxx"
-	testToken    = "xxxxxxxxxx"
-)
-
-func TestInfo(t *testing.T) {
+func TestUserInfo(t *testing.T) {
 	r := require.New(t)
 	c := NewClient(&http.Client{}, testClientID, testToken)
 	user, _, err := c.Users.Info("everpcpc")
@@ -20,15 +15,15 @@ func TestInfo(t *testing.T) {
 	r.Equal(26024, user.ID)
 }
 
-func TestCollection(t *testing.T) {
+func TestUserCollection(t *testing.T) {
 	r := require.New(t)
 	c := NewClient(&http.Client{}, testClientID, testToken)
-	subjects, _, err := c.Users.Collection("everpcpc", TypeWatching, nil, ResponceSmall)
+	subjects, _, err := c.Users.Collection("everpcpc", TypeWatching, nil, ResponseSmall)
 	r.Nil(err)
 	r.Equal(50, len(subjects))
 }
 
-func TestCollectionsOverview(t *testing.T) {
+func TestUserCollectionsOverview(t *testing.T) {
 	r := require.New(t)
 	c := NewClient(&http.Client{}, testClientID, testToken)
 	statuses, _, err := c.Users.CollectionsOverview("everpcpc", TypeAnime, 1)
@@ -38,7 +33,7 @@ func TestCollectionsOverview(t *testing.T) {
 	r.NotEmpty(statuses[0].Collects)
 }
 
-func TestCollectionsStatus(t *testing.T) {
+func TestUserCollectionsStatus(t *testing.T) {
 	r := require.New(t)
 	c := NewClient(&http.Client{}, testClientID, testToken)
 	statuses, _, err := c.Users.CollectionsStatus("everpcpc")
@@ -46,7 +41,7 @@ func TestCollectionsStatus(t *testing.T) {
 	r.NotEmpty(statuses)
 }
 
-func TestProgress(t *testing.T) {
+func TestUserProgress(t *testing.T) {
 	r := require.New(t)
 	c := NewClient(&http.Client{}, testClientID, testToken)
 
