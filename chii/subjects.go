@@ -75,16 +75,16 @@ type SubjectCollection struct {
 // Ep represents a Bangumi Ep.
 type Ep struct {
 	ID     int           `json:"id"`
-	Status EpWatchStatus `json:"status"`
+	Status EpWatchStatus `json:"status,omitempty"`
 }
 
 // EpWatchStatus represents a Bangumi Ep status.
 type EpWatchStatus struct {
 	ID      int      `json:"id"`
-	CSSName string   `json:"css_name"`
-	URLName string   `json:"url_name"`
-	CNName  string   `json:"cn_name"`
-	Status  EpStatus `json:"status"`
+	CSSName string   `json:"css_name,omitempty"`
+	URLName string   `json:"url_name,omitempty"`
+	CNName  string   `json:"cn_name,omitempty"`
+	Status  EpStatus `json:"status,omitempty"`
 }
 
 ///////////////////////////////////////////////////////////////

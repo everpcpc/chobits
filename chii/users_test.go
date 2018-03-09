@@ -45,11 +45,11 @@ func TestUserProgress(t *testing.T) {
 	r := require.New(t)
 	c := NewClient(&http.Client{}, testClientID, testToken)
 
-	subject, _, err := c.Users.ProgressSubject("everpcpc", 210864)
-	r.Nil(err)
-	r.Equal(210864, subject.SubjectID)
-
 	subjects, _, err := c.Users.Progress("everpcpc")
 	r.Nil(err)
 	r.Equal(15, len(subjects))
+
+	subject, _, err := c.Users.ProgressSubject("everpcpc", 12)
+	r.Nil(err)
+	r.Equal(12, subject.SubjectID)
 }
