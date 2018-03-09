@@ -13,11 +13,3 @@ type Character struct {
 	Info     Info     `json:"info,omitempty"`
 	Actors   []Person `json:"actors,omitempty"`
 }
-
-// CharacterAlias ...
-type CharacterAlias struct {
-	JP     string `json:"jp,omitempty"`
-	Romaji string `json:"romaji,omitempty"`
-	ZH     string `json:"zh,omitempty"`
-	Kana   string `json:"kana,omitempty"`
-}

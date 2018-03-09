@@ -45,14 +45,24 @@ type Images struct {
 
 // Info represents a person/character info
 type Info struct {
-	Birth   string         `json:"birth,omitempty"`
-	Height  string         `json:"height,omitempty"`
-	Gender  string         `json:"gender,omitempty"`
-	Alias   CharacterAlias `json:"alias,omitempty"`
-	Source  []string       `json:"source,omitempty"`
-	NameCN  string         `json:"name_cn,omitempty"`
-	CV      string         `json:"cv,omitempty"`
-	Twitter string         `json:"twitter,omitempty"`
+	Birth  string `json:"birth,omitempty"`
+	Height string `json:"height,omitempty"`
+	Gender string `json:"gender,omitempty"`
+	Alias  Alias  `json:"alias,omitempty"`
+
+	// FIXME: some times string https://github.com/bangumi/api/issues/16
+	Source  []string `json:"source,omitempty"`
+	NameCN  string   `json:"name_cn,omitempty"`
+	CV      string   `json:"cv,omitempty"`
+	Twitter string   `json:"twitter,omitempty"`
+}
+
+// Alias ...
+type Alias struct {
+	JP     string `json:"jp,omitempty"`
+	Romaji string `json:"romaji,omitempty"`
+	ZH     string `json:"zh,omitempty"`
+	Kana   string `json:"kana,omitempty"`
 }
 
 // TODO: 每日放送

@@ -74,26 +74,32 @@ type SubjectCollection struct {
 
 // Ep represents a Bangumi Ep.
 type Ep struct {
-	ID     int           `json:"id"`
-	Status EpWatchStatus `json:"status,omitempty"`
-}
-
-// EpWatchStatus represents a Bangumi Ep status.
-type EpWatchStatus struct {
-	ID      int      `json:"id"`
-	CSSName string   `json:"css_name,omitempty"`
-	URLName string   `json:"url_name,omitempty"`
-	CNName  string   `json:"cn_name,omitempty"`
-	Status  EpStatus `json:"status,omitempty"`
+	ID       int    `json:"id"`
+	URL      string `json:"url"`
+	Type     int    `json:"type,omitempty"` // TODO: not sure what it is
+	Sort     int    `json:"sort,omitempty"`
+	Name     string `json:"name,omitempty"`
+	NameCN   string `json:"name_cn,omitempty"`
+	Duration string `json:"duration,omitempty"`
+	Airdate  string `json:"airdate,omitempty"`
+	Comment  int    `json:"comment,omitempty"`
+	Desc     string `json:"desc,omitempty"`
+	Status   string `json:"status,omitempty"`
 }
 
 ///////////////////////////////////////////////////////////////
+
+type subjectParams struct {
+	ResponseGroup ResponseGroup `url:"responseGroup,omitempty"`
+}
 
 // Info returns the requested Subject.
 func (s *SubjectService) Info(id int, responseGroup ResponseGroup) (Subject, *http.Response, error) {
 	subject := Subject{}
 	apiError := new(APIError)
-	resp, err := s.sling.New().Get(strconv.Itoa(id)).Receive(&subject, apiError)
+	// FIXME: https://github.com/bangumi/api/issues/16
+	params := &subjectParams{ResponseGroup: ResponseLarge}
+	resp, err := s.sling.New().Get(strconv.Itoa(id)).QueryStruct(params).Receive(&subject, apiError)
 	return subject, resp, relevantError(err, *apiError)
 }
 

@@ -31,11 +31,26 @@ func newUserService(sling *sling.Sling) *UserService {
 	}
 }
 
-// SubjectOverview ...
-type SubjectOverview struct {
-	SubjectID int     `json:"subject_id"`
-	Eps       []Ep    `json:"eps,omitempty"`
-	Detail    Subject `json:"subject,omitempty"`
+// UserSubjectOverview ...
+type UserSubjectOverview struct {
+	SubjectID int      `json:"subject_id"`
+	Eps       []UserEp `json:"eps,omitempty"`
+	Detail    Subject  `json:"subject,omitempty"`
+}
+
+// UserEp represents a Bangumi Ep status for user.
+type UserEp struct {
+	ID     int               `json:"id"`
+	Status UserEpWatchStatus `json:"status,omitempty"`
+}
+
+// UserEpWatchStatus represents a Bangumi Ep status.
+type UserEpWatchStatus struct {
+	ID      int      `json:"id"`
+	CSSName string   `json:"css_name,omitempty"`
+	URLName string   `json:"url_name,omitempty"`
+	CNName  string   `json:"cn_name,omitempty"`
+	Status  EpStatus `json:"status,omitempty"`
 }
 
 // UserCollectionsStatus ...
@@ -48,9 +63,9 @@ type UserCollectionsStatus struct {
 
 // UserCollect ...
 type UserCollect struct {
-	Status UserCollectStatus `json:"status,omitempty"`
-	Count  int               `json:"count,omitempty"`
-	List   []SubjectOverview `json:"list,omitempty"`
+	Status UserCollectStatus     `json:"status,omitempty"`
+	Count  int                   `json:"count,omitempty"`
+	List   []UserSubjectOverview `json:"list,omitempty"`
 }
 
 // UserCollectStatus ...
@@ -144,20 +159,20 @@ type userProgressParams struct {
 
 // Progress returns progress for the requested User.
 // limit 15
-func (s *UserService) Progress(username string) ([]SubjectOverview, *http.Response, error) {
+func (s *UserService) Progress(username string) ([]UserSubjectOverview, *http.Response, error) {
 	apiError := new(APIError)
 	path := fmt.Sprintf("%s/progress", username)
-	subjects := []SubjectOverview{}
+	subjects := []UserSubjectOverview{}
 	resp, err := s.sling.New().Get(path).Receive(&subjects, apiError)
 	return subjects, resp, relevantError(err, *apiError)
 }
 
 // ProgressSubject returns progress for the requested User
 // and for a given subject.
-func (s *UserService) ProgressSubject(username string, subjectID int) (SubjectOverview, *http.Response, error) {
+func (s *UserService) ProgressSubject(username string, subjectID int) (UserSubjectOverview, *http.Response, error) {
 	apiError := new(APIError)
 	path := fmt.Sprintf("%s/progress", username)
-	subject := SubjectOverview{}
+	subject := UserSubjectOverview{}
 	params := &userProgressParams{SubjectID: subjectID}
 	resp, err := s.sling.New().Get(path).QueryStruct(params).Receive(&subject, apiError)
 	return subject, resp, relevantError(err, *apiError)
