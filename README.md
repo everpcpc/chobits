@@ -1,5 +1,5 @@
 # chobits
 Go bgm.tv REST API
 
-# Document
+## Document
 https://godoc.org/github.com/everpcpc/chobits
