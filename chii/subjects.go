@@ -39,7 +39,7 @@ type Subject struct {
 	Character   []Character       `json:"crt,omitempty"`
 	Staff       []Person          `json:"person,omitempty"`
 	Topic       []Topic           `json:"topic,omitempty"`
-	Blog        []Blog            `json:"blog,omitemtpy"`
+	Blog        []Blog            `json:"blog,omitempty"`
 }
 
 // SubjectRating ...

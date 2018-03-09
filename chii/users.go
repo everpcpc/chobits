@@ -64,10 +64,10 @@ type UserCollectStatus struct {
 type UserCollectionsSubject struct {
 	Name      string  `json:"name,omitempty"`
 	SubjectID int     `json:"subject_id,omitempty"`
-	EpStatus  int     `json:"ep_status,omitemtpy"`
-	VolStatus int     `json:"vol_status,omitemtpy"`
+	EpStatus  int     `json:"ep_status,omitempty"`
+	VolStatus int     `json:"vol_status,omitempty"`
 	LastTouch int     `json:"lasttouch,omitempty"`
-	Subject   Subject `json:"subject,omitemtpy"`
+	Subject   Subject `json:"subject,omitempty"`
 }
 
 ///////////////////////////////////////////////////////////////
@@ -83,9 +83,9 @@ func (s *UserService) Info(username string) (User, *http.Response, error) {
 ///////////////////////////////////////////////////////////////
 
 type userCollectionParams struct {
-	Cat           CollectionType `url:"cat,omitemtpy"`
-	IDs           string         `url:"ids,omitemtpy"`
-	ResponseGroup ResponseGroup  `url:"responseGroup,omitemtpy"`
+	cat           CollectionType `url:"cat,omitempty"`
+	ids           string         `url:"ids,omitempty"`
+	responseGroup ResponseGroup  `url:"responseGroup,omitempty"`
 }
 
 // Collection returns the collection for requested User.
@@ -97,9 +97,9 @@ func (s *UserService) Collection(username string, cat CollectionType, ids []int,
 	apiError := new(APIError)
 	path := fmt.Sprintf("%s/collection", username)
 	params := &userCollectionParams{
-		Cat:           cat,
-		IDs:           strings.Trim(strings.Join(strings.Fields(fmt.Sprint(ids)), ","), "[]"),
-		ResponseGroup: responseGroup,
+		cat:           cat,
+		ids:           strings.Trim(strings.Join(strings.Fields(fmt.Sprint(ids)), ","), "[]"),
+		responseGroup: responseGroup,
 	}
 	subjects := []UserCollectionsSubject{}
 	resp, err := s.sling.New().Get(path).QueryStruct(params).Receive(&subjects, apiError)
@@ -109,7 +109,7 @@ func (s *UserService) Collection(username string, cat CollectionType, ids []int,
 ///////////////////////////////////////////////////////////////
 
 type userCollectionsOverviewParams struct {
-	MaxResults int `url:"max_results,omitempty"`
+	maxResults int `url:"max_results,omitempty"`
 }
 
 // CollectionsOverview returns the collection overview
@@ -118,7 +118,7 @@ type userCollectionsOverviewParams struct {
 func (s *UserService) CollectionsOverview(username string, subjectType SubjectType, maxResults int) ([]UserCollectionsStatus, *http.Response, error) {
 	apiError := new(APIError)
 	path := fmt.Sprintf("%s/collections/%s", username, subjectTypeString[subjectType])
-	params := &userCollectionsOverviewParams{MaxResults: maxResults}
+	params := &userCollectionsOverviewParams{maxResults: maxResults}
 	status := []UserCollectionsStatus{}
 	resp, err := s.sling.New().Get(path).QueryStruct(params).Receive(&status, apiError)
 	return status, resp, relevantError(err, *apiError)
@@ -139,7 +139,7 @@ func (s *UserService) CollectionsStatus(username string) ([]UserCollectionsStatu
 ///////////////////////////////////////////////////////////////
 
 type userProgressParams struct {
-	SubjectID int `url:"subject_id,omitempty"`
+	subjectID int `url:"subject_id,omitempty"`
 }
 
 // Progress returns progress for the requested User.
@@ -160,11 +160,7 @@ func (s *UserService) ProgressSubject(username string, subjectID int) (SubjectOv
 	path := fmt.Sprintf("%s/progress", username)
 	subject := SubjectOverview{}
 
-	if subjectID == 0 {
-		return subject, nil, fmt.Errorf("subjectID invalid")
-	}
-
-	params := &userProgressParams{SubjectID: subjectID}
+	params := &userProgressParams{subjectID: subjectID}
 	resp, err := s.sling.New().Get(path).QueryStruct(params).Receive(&subject, apiError)
 	return subject, resp, relevantError(err, *apiError)
 }

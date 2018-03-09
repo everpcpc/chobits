@@ -2,12 +2,12 @@ package chii
 
 // Topic ...
 type Topic struct {
-	ID        int    `json:"id,omitemtpy"`
-	URL       string `json:"url,omitemtpy"`
-	Title     string `json:"title,omitemtpy"`
-	MainID    string `json:"main_id,omitemtpy"`
-	Timestamp int    `json:"timestamp,omitemtpy"`
-	Lastpost  int    `json:"lastpost,omitemtpy"`
-	Replies   int    `json:"replies,omitemtpy"`
-	User      User   `json:"user,omitemtpy"`
+	ID        int    `json:"id,omitempty"`
+	URL       string `json:"url,omitempty"`
+	Title     string `json:"title,omitempty"`
+	MainID    string `json:"main_id,omitempty"`
+	Timestamp int    `json:"timestamp,omitempty"`
+	Lastpost  int    `json:"lastpost,omitempty"`
+	Replies   int    `json:"replies,omitempty"`
+	User      User   `json:"user,omitempty"`
 }

@@ -7,11 +7,11 @@ type Character struct {
 	Name     string   `json:"name"`
 	NameCN   string   `json:"name_cn,omitempty"`
 	RoleName string   `json:"role_name,omitempty"`
-	Images   Images   `json:"images,omitemtpy"`
-	Comment  int      `json:"comments,omitemtpy"`
-	Collects int      `json:"collects,omitemtpy"`
-	Info     Info     `json:"info,omitemtpy"`
-	Actors   []Person `json:"actors,omitemtpy"`
+	Images   Images   `json:"images,omitempty"`
+	Comment  int      `json:"comments,omitempty"`
+	Collects int      `json:"collects,omitempty"`
+	Info     Info     `json:"info,omitempty"`
+	Actors   []Person `json:"actors,omitempty"`
 }
 
 // CharacterAlias ...
