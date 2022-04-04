@@ -7,11 +7,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestGetSubject(t *testing.T) {
+func TestGetEpisode(t *testing.T) {
 	r := require.New(t)
 	c := NewClient(&http.Client{}, testClientID, testToken)
-	subject, _, err := c.Subject.Get(343656)
+	ep, _, err := c.Episode.Get(1088292)
 	r.Nil(err)
-	r.Equal(343656, subject.ID)
-	r.Equal("阿波連さんははかれない", subject.Name)
+	r.Equal(1088292, ep.ID)
+	r.Equal(343656, ep.SubjectID)
+	r.Equal("近すぎじゃね？", ep.Name)
 }

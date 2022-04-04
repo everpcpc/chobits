@@ -25,17 +25,17 @@ https://bangumi.github.io/api/#/
 
 ### progress
 - [ ] /ep/{id}/status/{status}
-- [ ] /ep/{id}/status/{status} POST
-- [ ] /subject/{subject_id}/update/watched_eps POST
+- [ ] /ep/{id}/status/{status} `POST`
+- [ ] /subject/{subject_id}/update/watched_eps `POST`
 
 ### collection
 - [ ] /collection/{subject_id}
-- [ ] /collection/{subject_id}/{action} POST
+- [ ] /collection/{subject_id}/{action} `POST`
 - [ ] /v0/users/{username}/collections
 
 ### episode
 - [ ] /v0/episodes
-- [ ] /v0/episodes/{episode_id}
+- [x] /v0/episodes/{episode_id}
 
 ### character
 - [ ] /v0/characters/{character_id}

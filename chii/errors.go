@@ -6,7 +6,6 @@ import (
 
 // https://github.com/bangumi/api/blob/master/docs-raw/Define.md#status-code
 
-// APIError represents a Bangumi API Error response
 type APIError struct {
 	Message string `json:"error"`
 	Code    int    `json:"code"`

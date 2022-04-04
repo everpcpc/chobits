@@ -6,36 +6,31 @@ import (
 	"github.com/dghubble/sling"
 )
 
-// Client is a Bangumi client for making Bangumi API requests.
 type Client struct {
-	sling      *sling.Sling
-	clientID   string
-	token      string
-	Users      *UserService
-	Subject    *SubjectService
-	Collection *CollectionService
+	sling    *sling.Sling
+	clientID string
+	token    string
+	Subject  *SubjectService
+	Episode  *EpisodeService
 }
 
 type appIDParam struct {
 	AppID string `url:"app_id,omitempty"`
 }
 
-// NewClient returns a new Client.
 func NewClient(httpClient *http.Client, clientID, token string) *Client {
 	params := &appIDParam{AppID: clientID}
 	// base := sling.New().Client(httpClient).Base(bgmAPI).Set("User-Agent", "Chii-1.0").Set("Authorization", "Bearer "+token).QueryStruct(params)
 	base := sling.New().Client(httpClient).Base(bgmAPI).Set("User-Agent", "Chii-1.0").QueryStruct(params)
 	return &Client{
-		sling:      base,
-		clientID:   clientID,
-		token:      token,
-		Users:      newUserService(base.New()),
-		Subject:    newSubjectService(base.New()),
-		Collection: newCollectionService(base.New()),
+		sling:    base,
+		clientID: clientID,
+		token:    token,
+		Subject:  newSubjectService(base.New()),
+		Episode:  newEpisodeService(base.New()),
 	}
 }
 
-// Images respents a set of Bangumi images
 type Images struct {
 	Large  string `json:"large,omitempty"`
 	Common string `json:"common,omitempty"`
@@ -58,13 +53,9 @@ type Info struct {
 	Twitter string   `json:"twitter,omitempty"`
 }
 
-// Alias ...
 type Alias struct {
 	JP     string `json:"jp,omitempty"`
 	Romaji string `json:"romaji,omitempty"`
 	ZH     string `json:"zh,omitempty"`
 	Kana   string `json:"kana,omitempty"`
 }
-
-// TODO: 每日放送
-// GET /calendar
