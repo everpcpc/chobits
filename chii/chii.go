@@ -18,10 +18,18 @@ type appIDParam struct {
 	AppID string `url:"app_id,omitempty"`
 }
 
-func NewClient(httpClient *http.Client, clientID, token string) *Client {
+func NewClient(httpClient *http.Client) *Client {
+	base := sling.New().Client(httpClient).Base(bgmAPI).Set("User-Agent", "Chii-1.0")
+	return &Client{
+		sling:   base,
+		Subject: newSubjectService(base.New()),
+		Episode: newEpisodeService(base.New()),
+	}
+}
+
+func NewClientWithAuth(httpClient *http.Client, clientID, token string) *Client {
 	params := &appIDParam{AppID: clientID}
-	// base := sling.New().Client(httpClient).Base(bgmAPI).Set("User-Agent", "Chii-1.0").Set("Authorization", "Bearer "+token).QueryStruct(params)
-	base := sling.New().Client(httpClient).Base(bgmAPI).Set("User-Agent", "Chii-1.0").QueryStruct(params)
+	base := sling.New().Client(httpClient).Base(bgmAPI).Set("User-Agent", "Chii-1.0").Set("Authorization", "Bearer "+token).QueryStruct(params)
 	return &Client{
 		sling:    base,
 		clientID: clientID,

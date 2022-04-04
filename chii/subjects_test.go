@@ -9,7 +9,7 @@ import (
 
 func TestGetSubject(t *testing.T) {
 	r := require.New(t)
-	c := NewClient(&http.Client{}, testClientID, testToken)
+	c := NewClient(&http.Client{})
 	subject, _, err := c.Subject.Get(343656)
 	r.Nil(err)
 	r.Equal(343656, subject.ID)

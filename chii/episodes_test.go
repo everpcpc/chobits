@@ -9,7 +9,7 @@ import (
 
 func TestGetEpisode(t *testing.T) {
 	r := require.New(t)
-	c := NewClient(&http.Client{}, testClientID, testToken)
+	c := NewClient(&http.Client{})
 	ep, _, err := c.Episode.Get(1088292)
 	r.Nil(err)
 	r.Equal(1088292, ep.ID)
