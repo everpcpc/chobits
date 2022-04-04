@@ -1,6 +1,6 @@
 package chii
 
-const bgmAPI = "https://api.bgm.tv/"
+const bgmAPI = "https://api.bgm.tv/v0/"
 
 // SubjectType ...
 type SubjectType int

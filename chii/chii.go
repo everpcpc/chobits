@@ -23,7 +23,8 @@ type appIDParam struct {
 // NewClient returns a new Client.
 func NewClient(httpClient *http.Client, clientID, token string) *Client {
 	params := &appIDParam{AppID: clientID}
-	base := sling.New().Client(httpClient).Base(bgmAPI).Set("User-Agent", "Go Chii Client").Set("Authorization", "Bearer "+token).QueryStruct(params)
+	// base := sling.New().Client(httpClient).Base(bgmAPI).Set("User-Agent", "Chii-1.0").Set("Authorization", "Bearer "+token).QueryStruct(params)
+	base := sling.New().Client(httpClient).Base(bgmAPI).Set("User-Agent", "Chii-1.0").QueryStruct(params)
 	return &Client{
 		sling:      base,
 		clientID:   clientID,

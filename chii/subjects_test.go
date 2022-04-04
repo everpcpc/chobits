@@ -10,7 +10,8 @@ import (
 func TestSubjectInfo(t *testing.T) {
 	r := require.New(t)
 	c := NewClient(&http.Client{}, testClientID, testToken)
-	subject, _, err := c.Subject.Info(12, ResponseLarge)
+	subject, _, err := c.Subject.Info(343656)
 	r.Nil(err)
-	r.Equal(12, subject.ID)
+	r.Equal(343656, subject.ID)
+	r.Equal("阿波連さんははかれない", subject.Name)
 }

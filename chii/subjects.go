@@ -7,84 +7,74 @@ import (
 	"github.com/dghubble/sling"
 )
 
-// https://github.com/bangumi/api/blob/master/docs-raw/Subject-API.md
+// https://bangumi.github.io/api/#/%E6%9D%A1%E7%9B%AE
 
-// SubjectService provides methods for accessing Bangumi subject API endpoints.
 type SubjectService struct {
 	sling *sling.Sling
 }
 
 func newSubjectService(sling *sling.Sling) *SubjectService {
 	return &SubjectService{
-		sling: sling.Path("subject/"),
+		sling: sling.Path("subjects/"),
 	}
 }
 
-// Subject respents a Bangumi subject detail
 type Subject struct {
-	ID          int               `json:"id"`
-	URL         string            `json:"url"`
-	Type        SubjectType       `json:"type"`
-	Name        string            `json:"name"`
-	NameCN      string            `json:"name_cn,omitempty"`
-	Summary     string            `json:"summary,omitempty"`
-	Eps         []Ep              `json:"eps,omitempty"`
-	EpsCount    int               `json:"eps_count,omitempty"`
-	AirDate     string            `json:"air_date,omitempty"`
-	AirWeekdays int               `json:"air_weekday,omitempty"`
-	Rating      SubjectRating     `json:"rating,omitempty"`
-	Rank        int               `json:"rank,omitempty"`
-	Images      Images            `json:"images,omitempty"`
-	Collection  SubjectCollection `json:"collection,omitempty"`
-	Character   []Character       `json:"crt,omitempty"`
-	Staff       []Person          `json:"person,omitempty"`
-	Topic       []Topic           `json:"topic,omitempty"`
-	Blog        []Blog            `json:"blog,omitempty"`
+	ID            int               `json:"id"`
+	Type          SubjectType       `json:"type"`
+	Name          string            `json:"name"`
+	NameCN        string            `json:"name_cn"`
+	Summary       string            `json:"summary"`
+	NSFW          bool              `json:"nsfw"`
+	Locked        bool              `json:"locked"`
+	Date          string            `json:"date,omitempty"`
+	Platform      string            `json:"platform"`
+	Images        Images            `json:"images,omitempty"`
+	Infobox       []Infobox         `json:"infobox,omitempty"`
+	Volumes       int               `json:"volumes"`
+	Eps           int               `json:"eps"`
+	TotalEpisodes int               `json:"total_episodes"`
+	Rating        SubjectRating     `json:"rating"`
+	Collection    SubjectCollection `json:"collection"`
+	Tags          []SubjectTag      `json:"tags"`
 }
 
-// SubjectRating ...
+type Infobox struct {
+	Key   string      `json:"key"`
+	Value interface{} `json:"value"`
+}
+
 type SubjectRating struct {
-	Total int                `json:"total,omitempty"`
-	Count SubjectRatingCount `json:"count,omitempty"`
-	Score float64            `json:"score,omitempty"`
+	Rank  int                `json:"rank"`
+	Total int                `json:"total"`
+	Count SubjectRatingCount `json:"count"`
+	Score float64            `json:"score"`
 }
 
-// SubjectRatingCount ...
 type SubjectRatingCount struct {
-	One   int `json:"1,omitempty"`
-	Two   int `json:"2,omitempty"`
-	Three int `json:"3,omitempty"`
-	Four  int `json:"4,omitempty"`
-	Five  int `json:"5,omitempty"`
-	Six   int `json:"6,omitempty"`
-	Seven int `json:"7,omitempty"`
-	Eight int `json:"8,omitempty"`
-	Nine  int `json:"9,omitempty"`
-	Ten   int `json:"10,omitempty"`
+	One   int `json:"1"`
+	Two   int `json:"2"`
+	Three int `json:"3"`
+	Four  int `json:"4"`
+	Five  int `json:"5"`
+	Six   int `json:"6"`
+	Seven int `json:"7"`
+	Eight int `json:"8"`
+	Nine  int `json:"9"`
+	Ten   int `json:"10"`
 }
 
-// SubjectCollection represents collection for a subject
 type SubjectCollection struct {
-	Wish    int `json:"wish,omitempty"`
-	Collect int `json:"collect,omitempty"`
-	Doing   int `json:"doing,omitempty"`
-	OnHold  int `json:"on_hold,omitempty"`
-	Dropped int `json:"dropped,omitempty"`
+	Wish    int `json:"wish"`
+	Collect int `json:"collect"`
+	Doing   int `json:"doing"`
+	OnHold  int `json:"on_hold"`
+	Dropped int `json:"dropped"`
 }
 
-// Ep represents a Bangumi Ep.
-type Ep struct {
-	ID       int    `json:"id"`
-	URL      string `json:"url"`
-	Type     int    `json:"type,omitempty"` // TODO: not sure what it is
-	Sort     int    `json:"sort,omitempty"`
-	Name     string `json:"name,omitempty"`
-	NameCN   string `json:"name_cn,omitempty"`
-	Duration string `json:"duration,omitempty"`
-	Airdate  string `json:"airdate,omitempty"`
-	Comment  int    `json:"comment,omitempty"`
-	Desc     string `json:"desc,omitempty"`
-	Status   string `json:"status,omitempty"`
+type SubjectTag struct {
+	Name  string `json:"name"`
+	Count int    `json:"count"`
 }
 
 ///////////////////////////////////////////////////////////////
@@ -93,22 +83,9 @@ type subjectParams struct {
 	ResponseGroup ResponseGroup `url:"responseGroup,omitempty"`
 }
 
-// Info returns the requested Subject.
-func (s *SubjectService) Info(id int, responseGroup ResponseGroup) (Subject, *http.Response, error) {
+func (s *SubjectService) Info(id int) (Subject, *http.Response, error) {
 	subject := Subject{}
-	apiError := new(APIError)
-	// FIXME: https://github.com/bangumi/api/issues/16
-	params := &subjectParams{ResponseGroup: ResponseLarge}
-	resp, err := s.sling.New().Get(strconv.Itoa(id)).QueryStruct(params).Receive(&subject, apiError)
-	return subject, resp, relevantError(err, *apiError)
-}
-
-///////////////////////////////////////////////////////////////
-
-// InfoEp returns the Eps and basic info for requested Subject.
-func (s *SubjectService) InfoEp(id int, responseGroup ResponseGroup) (Subject, *http.Response, error) {
-	subject := Subject{}
-	apiError := new(APIError)
-	resp, err := s.sling.New().Get(strconv.Itoa(id)+"/ep").Receive(&subject, apiError)
-	return subject, resp, relevantError(err, *apiError)
+	apiError := APIError{}
+	resp, err := s.sling.New().Get(strconv.Itoa(id)).Receive(&subject, &apiError)
+	return subject, resp, relevantError(err, apiError)
 }
